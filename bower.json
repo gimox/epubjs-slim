@@ -7,9 +7,9 @@
   ],
   "main": "epub.js",
   "description": "JavaScript library for rendering ePub documents in the browser, across many devices.",
-  "main": "build/epub.js",
   "keywords": [
     "epub"
   ],
-  "license": "FreeBSD"
+  "license": "FreeBSD",
+  "dependencies": {}
 }
