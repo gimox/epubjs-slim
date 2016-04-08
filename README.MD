@@ -1,3 +1,8 @@
+
+
+Preface
+================================
+
 This repo is a fork from EPUBJS - futurepress.  
 
 It patch the class for ios and safari resolving `this` error.
@@ -83,6 +88,9 @@ There are currently a [number of open issues for Internet Explorer](https://gith
 
 Recent Updates
 -------------------------
+
++ fix ios `this` for resize events
+
 + v2 splits the render method from the layout and renderer. Currently only iframe rendering is supported, but this change will allow for new render methods in the future. See the breaking changes to the renderer [here](https://github.com/futurepress/epub.js/blob/master/documentation/README.md#renderer).
 
 + Work-in-progress pagination support using EPUB page-lists. See a [usage example](http://futurepress.github.io/epub.js/examples/pagination.html). ```renderer:pageChanged``` has changed to ```renderer:locationChanged``` and a ```book:pageChanged``` event was added to pass pagination events.
@@ -98,36 +106,6 @@ Recent Updates
 + Many more [Tests](http://futurepress.github.io/epub.js/tests/)
 
 
-Running Locally
--------------------------
-
-Install [node.js](http://nodejs.org/)
-
-Then install the project dependences with npm
-
-```javascript
-npm install
-```
-
-You can run the reader locally with the command
-
-```javascript
-node server.js
-```
-
-Builds are concatenated and minified using [gruntjs](http://gruntjs.com/getting-started)
-
-To generate a new build run
-
-```javascript
-grunt
-```
-
-Or, to generate builds as you make changes run
-
-```
-grunt watch
-```
 
 Examples
 -------------------------
@@ -144,20 +122,6 @@ Examples
 
 [View All Examples](http://futurepress.github.io/epub.js/examples/)
 
-Testing
--------------------------
-
-Once you start a server you can run the [QUnit](http://qunitjs.com/) tests at [http://localhost:8080/tests/](http://localhost:8080/tests/)
-
-You can download the test books from https://github.com/futurepress/books by running:
-```
-git submodule update --init --recursive
-```
-
-Then you can pull the latest with:
-```
-git submodule foreach git pull origin master
-```
 
 Hooks
 -------------------------
