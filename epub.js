@@ -1599,7 +1599,7 @@
 'use strict';
 
 var EPUBJS = EPUBJS || {};
-EPUBJS.VERSION = "0.2.14";
+EPUBJS.VERSION = "0.2.14.GM";
 
 EPUBJS.plugins = EPUBJS.plugins || {};
 
@@ -2933,11 +2933,11 @@ EPUBJS.Book.prototype.unload = function(){
 
 EPUBJS.Book.prototype.destroy = function() {
 
-	window.removeEventListener("beforeunload", this.unload);
+	window.removeEventListener("beforeunload", this.unload.bind(this));
 
 	if(this.currentChapter) this.currentChapter.unload();
 
-	this.unload();
+	this.unload.bind(this);
 
 	if(this.renderer) this.renderer.remove();
 
@@ -3212,7 +3212,7 @@ EPUBJS.Chapter.prototype.cfiFromRange = function(_range) {
 
 		// Fuzzy Match
 		if(!startContainer) {
-			console.log("not found, try fuzzy match");
+			//console.log("not found, try fuzzy match");
 			cleanStartTextContent = EPUBJS.core.cleanStringForXpath(_range.startContainer.textContent);
 			startXpath = "//text()[contains(.," + cleanStartTextContent + ")]";
 
@@ -5794,7 +5794,7 @@ EPUBJS.Render.Iframe.prototype.load = function(contents, url){
 			deferred = new RSVP.defer();
 
 	if(this.window) {
-		this.unload();
+		this.unload.bind(this);
 	}
 
 	this.iframe.onload = function(e) {
@@ -5873,6 +5873,7 @@ EPUBJS.Render.Iframe.prototype.loaded = function(v){
 // Resize the iframe to the given width and height
 EPUBJS.Render.Iframe.prototype.resize = function(width, height){
 	var iframeBox;
+    //console.log("IFRAME", this.iframe);
 
 	if(!this.iframe) return;
 
@@ -6135,7 +6136,7 @@ EPUBJS.Renderer.prototype.initialize = function(element, width, height){
 		this.render.resize('100%', '100%');
 	}
 
-	document.addEventListener("orientationchange", this.onResized);
+	document.addEventListener("orientationchange", this.onResized.bind(this)); //GM
 };
 
 /**
@@ -6165,11 +6166,11 @@ EPUBJS.Renderer.prototype.displayChapter = function(chapter, globalLayout){
 				this.currentChapter.unload(); // Remove stored blobs
 
 				if(this.render.window){
-					this.render.window.removeEventListener("resize", this.resized);
+					this.render.window.removeEventListener("resize", this.resized.bind(this));
 				}
 
 				this.removeEventListeners();
-				this.removeSelectionListeners();
+				this.removeSelectionListeners.bind(this);
 				this.trigger("renderer:chapterUnloaded");
 				this.contents = null;
 				this.doc = null;
@@ -6241,7 +6242,7 @@ EPUBJS.Renderer.prototype.afterLoad = function(contents) {
 
 	// window.addEventListener("orientationchange", this.onResized.bind(this), false);
 	if(!this.initWidth && !this.initHeight){
-		this.render.window.addEventListener("resize", this.resized, false);
+		this.render.window.addEventListener("resize", this.resized.bind(this), false);
 	}
 
 	this.addEventListeners();
@@ -6420,10 +6421,10 @@ EPUBJS.Renderer.prototype.visible = function(bool){
 // Remove the render element and clean up listeners
 EPUBJS.Renderer.prototype.remove = function() {
 	if(this.render.window) {
-		this.render.unload();
-		this.render.window.removeEventListener("resize", this.resized);
+		this.render.unload.bind(this);
+		this.render.window.removeEventListener("resize", this.resized.bind(this));
 		this.removeEventListeners();
-		this.removeSelectionListeners();
+		this.removeSelectionListeners.bind(this);
 	}
 
 	this.container.removeChild(this.element);
@@ -7167,7 +7168,7 @@ EPUBJS.Renderer.prototype.hideHashChanges = function(){
 
 EPUBJS.Renderer.prototype.resize = function(width, height, setSize){
 	var spreads;
-
+    //console.log("resize method",width,height,setSize);
 	this.width = width;
 	this.height = height;
 
@@ -7229,7 +7230,7 @@ EPUBJS.Renderer.prototype.removeSelectionListeners = function(){
 	if(!this.render.document) {
 		return;
 	}
-	this.doc.removeEventListener("selectionchange", this.onSelectionChange, false);
+	this.doc.removeEventListener("selectionchange", this.onSelectionChange.bind(this), false);
 };
 
 EPUBJS.Renderer.prototype.onSelectionChange = function(e){
@@ -7847,7 +7848,7 @@ EPUBJS.Unarchiver.prototype.toStorage = function(entries){
 		timeout += delay;
 	});
 
-	console.log("time", timeout);
+	//console.log("time", timeout);
 
 	//entries.forEach(this.saveEntryFileToStorage.bind(this));
 };
