@@ -6036,7 +6036,7 @@ EPUBJS.Render.Iframe.prototype.scroll = function(bool){
 
 // Cleanup event listeners
 EPUBJS.Render.Iframe.prototype.unload = function(){
-	this.window.removeEventListener("resize", this.resized);
+	this.window.removeEventListener("resize", this.resized.bind(this));
 	this.window.location.reload();
 };
 
@@ -6165,11 +6165,11 @@ EPUBJS.Renderer.prototype.displayChapter = function(chapter, globalLayout){
 				this.currentChapter.unload(); // Remove stored blobs
 
 				if(this.render.window){
-					this.render.window.removeEventListener("resize", this.resized);
+					this.render.window.removeEventListener("resize", this.resized.bind(this));
 				}
 
 				this.removeEventListeners();
-				this.removeSelectionListeners();
+				this.removeSelectionListeners.bind(this);
 				this.trigger("renderer:chapterUnloaded");
 				this.contents = null;
 				this.doc = null;
@@ -6241,7 +6241,7 @@ EPUBJS.Renderer.prototype.afterLoad = function(contents) {
 
 	// window.addEventListener("orientationchange", this.onResized.bind(this), false);
 	if(!this.initWidth && !this.initHeight){
-		this.render.window.addEventListener("resize", this.resized, false);
+		this.render.window.addEventListener("resize", this.resized.bind(this), false);
 	}
 
 	this.addEventListeners();
@@ -6419,14 +6419,30 @@ EPUBJS.Renderer.prototype.visible = function(bool){
 
 // Remove the render element and clean up listeners
 EPUBJS.Renderer.prototype.remove = function() {
+
+
+    console.log("RENDER RENDER NREDDD",this.render);
 	if(this.render.window) {
 		this.render.unload();
-		this.render.window.removeEventListener("resize", this.resized);
+		this.render.window.removeEventListener("resize", this.resized.bind(this));
 		this.removeEventListeners();
-		this.removeSelectionListeners();
+		this.removeSelectionListeners.bind(this);
 	}
+    // GM TRY TO FIX IPAD
+    if(this.container == null) {
+        this.container = document.getElementById("area");
+    }
+    
+    if(typeof this.element == 'undefined'){
+        this.element = this.container.getElementsByTagName('iframe')[0];
+    }
 
-	this.container.removeChild(this.element);
+    if(this.container && this.element) {
+        this.container.removeChild(this.element);
+    } else {
+        throw "pub render error on render destroy";
+    }
+    
 };
 
 //-- STYLES
