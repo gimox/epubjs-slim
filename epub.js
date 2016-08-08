@@ -5862,6 +5862,10 @@ EPUBJS.Render.Iframe.prototype.loaded = function(v){
 	this.headEl = this.document.head;
 	this.bodyEl = this.document.body || this.document.querySelector("body");
 	this.window = this.iframe.contentWindow;
+	
+	setTimeout( () => {
+        	this.window.focus();
+    	}, 100);
 
 	if(url != "about:blank"){
 		baseEl = this.iframe.contentDocument.querySelector("base");
@@ -5887,6 +5891,10 @@ EPUBJS.Render.Iframe.prototype.resize = function(width, height){
 	// Default to orginal if bounding rect is 0
 	this.width = this.iframe.getBoundingClientRect().width || width;
 	this.height = this.iframe.getBoundingClientRect().height || height;
+	
+	setTimeout( () => {
+        	this.window.focus();
+    	}, 300);
 };
 
 
