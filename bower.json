@@ -1,10 +1,9 @@
 {
     "name": "epub.js",
-    "version": "0.2.15",
+    "version": "0.2.17",
     "homepage": "https://github.com/futurepress/epub.js",
     "authors": [
-        "Fred Chasen <fchasen@gmail.com>",
-        "Giorgio Modoni <modogio@gmnail.com>"
+        "Fred Chasen <fchasen@gmail.com>"
     ],
     "main": "epub.js",
     "description": "JavaScript library for rendering ePub documents in the browser, across many devices. Fixed for ios and safari",
